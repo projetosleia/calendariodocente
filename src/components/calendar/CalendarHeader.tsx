@@ -36,23 +36,23 @@ const CalendarHeader = ({
   return (
     <div className="flex justify-between items-center mb-4 p-2">
       <div className="flex items-center">
-        <h2 className="text-xl font-semibold mr-4">{formatTitle()}</h2>
+        <h2 className="text-xl font-semibold mr-4 text-purple-800">{formatTitle()}</h2>
         <div className="flex items-center space-x-1">
-          <Button variant="outline" size="icon" onClick={onPrevious}>
-            <ChevronLeft className="h-4 w-4" />
+          <Button variant="outline" size="icon" onClick={onPrevious} className="border-purple-200 hover:bg-purple-100">
+            <ChevronLeft className="h-4 w-4 text-purple-700" />
           </Button>
-          <Button variant="outline" size="icon" onClick={onNext}>
-            <ChevronRight className="h-4 w-4" />
+          <Button variant="outline" size="icon" onClick={onNext} className="border-purple-200 hover:bg-purple-100">
+            <ChevronRight className="h-4 w-4 text-purple-700" />
           </Button>
         </div>
       </div>
       
-      <div className="flex items-center space-x-2 bg-gray-100 rounded-md p-1">
+      <div className="flex items-center space-x-2 bg-purple-50 rounded-md p-1">
         <Button 
           variant={view === 'day' ? "default" : "ghost"} 
           size="sm"
           onClick={() => onViewChange('day')}
-          className={view === 'day' ? "bg-indigo-600 text-white" : "text-gray-600"}
+          className={view === 'day' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
         >
           Dia
         </Button>
@@ -60,7 +60,7 @@ const CalendarHeader = ({
           variant={view === 'week' ? "default" : "ghost"} 
           size="sm"
           onClick={() => onViewChange('week')}
-          className={view === 'week' ? "bg-indigo-600 text-white" : "text-gray-600"}
+          className={view === 'week' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
         >
           Semana
         </Button>
@@ -68,7 +68,7 @@ const CalendarHeader = ({
           variant={view === 'month' ? "default" : "ghost"} 
           size="sm"
           onClick={() => onViewChange('month')}
-          className={view === 'month' ? "bg-indigo-600 text-white" : "text-gray-600"}
+          className={view === 'month' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
         >
           Mês
         </Button>

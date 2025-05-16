@@ -2,8 +2,9 @@
 import React from 'react';
 import CalendarEvent, { CalendarEventProps } from './CalendarEvent';
 import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface DayViewProps {
   date: Date;
@@ -24,19 +25,35 @@ const DayView = ({ date, events }: DayViewProps) => {
     });
   };
 
+  const getAllDayEvents = () => {
+    return events.filter(event => !event.startTime);
+  };
+
+  const allDayEvents = getAllDayEvents();
+
   return (
-    <Card className="border rounded-md">
+    <Card className="border rounded-md shadow-sm">
+      <CardHeader className="bg-purple-50 border-b py-3">
+        <CardTitle className="text-lg text-purple-800 flex items-center justify-center">
+          {format(date, "EEEE, dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
+        </CardTitle>
+      </CardHeader>
       <CardContent className="p-0">
-        <div className="p-4 border-b">
-          <h2 className="font-medium text-lg">
-            {format(date, "EEEE, dd 'de' MMMM", { locale: require('date-fns/locale/pt-BR') })}
-          </h2>
-        </div>
+        {allDayEvents.length > 0 && (
+          <div className="border-b p-2">
+            <h3 className="text-xs font-medium text-purple-700 mb-2">Eventos e Tarefas do Dia</h3>
+            <div className="space-y-2">
+              {allDayEvents.map((event) => (
+                <CalendarEvent key={event.id} {...event} />
+              ))}
+            </div>
+          </div>
+        )}
         <ScrollArea className="h-[calc(100vh-280px)]">
           <div className="min-w-full">
             {timeSlots.map(hour => (
               <div key={hour} className="flex min-h-[80px] border-b last:border-0">
-                <div className="w-16 p-2 text-xs text-gray-500 border-r flex justify-center pt-2">
+                <div className="w-16 p-2 text-xs text-purple-500 border-r flex justify-center pt-2 bg-purple-50">
                   {formatTimeSlot(hour)}
                 </div>
                 <div className="flex-1 p-2">

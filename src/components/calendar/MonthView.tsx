@@ -9,11 +9,10 @@ import {
   startOfWeek,
   endOfWeek,
   isSameMonth,
-  isSameDay,
-  parseISO
+  isSameDay
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import CalendarEvent from './CalendarEvent';
 
 interface MonthViewProps {
@@ -58,12 +57,17 @@ const MonthView = ({ date, events }: MonthViewProps) => {
   };
   
   return (
-    <Card className="border rounded-md">
+    <Card className="border rounded-md shadow-sm">
+      <CardHeader className="bg-purple-50 border-b py-3">
+        <CardTitle className="text-lg text-purple-800 text-center">
+          {format(date, "MMMM 'de' yyyy", { locale: ptBR })}
+        </CardTitle>
+      </CardHeader>
       <CardContent className="p-0">
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b">
+        <div className="grid grid-cols-7 border-b bg-purple-50">
           {['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB'].map((dayName, i) => (
-            <div key={i} className="p-2 text-center text-sm font-medium">
+            <div key={i} className="p-2 text-center text-sm font-medium text-purple-700">
               {dayName}
             </div>
           ))}
@@ -82,11 +86,11 @@ const MonthView = ({ date, events }: MonthViewProps) => {
                   <div 
                     key={dayIndex} 
                     className={`min-h-[110px] p-1 border-r last:border-0 ${
-                      isCurrentMonth ? 'bg-white' : 'bg-gray-50'
+                      isCurrentMonth ? 'bg-white' : 'bg-purple-50/30'
                     }`}
                   >
                     <div className={`text-right p-1 text-sm ${
-                      isCurrentMonth ? 'text-gray-900' : 'text-gray-400'
+                      isCurrentMonth ? 'text-purple-900' : 'text-purple-400'
                     }`}>
                       {format(day, 'd')}
                     </div>
@@ -99,7 +103,7 @@ const MonthView = ({ date, events }: MonthViewProps) => {
                       ))}
                       
                       {hasMoreEvents && (
-                        <div className="text-xs text-gray-500 px-2">
+                        <div className="text-xs text-purple-500 px-2">
                           + {dayEvents.length - 3} mais
                         </div>
                       )}

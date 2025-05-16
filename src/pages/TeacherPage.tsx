@@ -9,7 +9,7 @@ import CalendarLegend from '@/components/calendar/CalendarLegend';
 import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
 
-// Sample events data
+// Sample events data with links
 const sampleEvents: CalendarEventProps[] = [
   {
     id: '1',
@@ -19,7 +19,8 @@ const sampleEvents: CalendarEventProps[] = [
     startTime: '10:00',
     endTime: '11:30',
     startDate: new Date(),
-    description: 'Reunião mensal do departamento'
+    description: 'Reunião mensal do departamento para discutir o calendário acadêmico',
+    link: 'https://meet.google.com/abc-defg-hij'
   },
   {
     id: '2',
@@ -28,7 +29,8 @@ const sampleEvents: CalendarEventProps[] = [
     urgency: 'urgent',
     startDate: new Date(),
     endDate: addDays(new Date(), 2),
-    description: 'Prazo final para entrega das notas do bimestre'
+    description: 'Prazo final para entrega das notas do bimestre no sistema',
+    link: 'https://www.ulife.com.br/notas'
   },
   {
     id: '3',
@@ -36,7 +38,8 @@ const sampleEvents: CalendarEventProps[] = [
     type: 'news',
     urgency: 'medium',
     startDate: addDays(new Date(), 1),
-    description: 'Palestra com especialista em metodologias ativas'
+    description: 'Palestra com especialista em metodologias ativas, aberta a todos os docentes',
+    link: 'https://www.ulife.com.br/eventos/palestra-metodologias'
   },
   {
     id: '4',
@@ -46,13 +49,55 @@ const sampleEvents: CalendarEventProps[] = [
     startTime: '14:00',
     endTime: '17:00',
     startDate: addDays(new Date(), 3),
-    description: 'Conselho de classe do 2º bimestre'
+    description: 'Conselho de classe do 2º bimestre - participação obrigatória',
+    link: 'https://www.ulife.com.br/eventos/conselho-classe'
+  },
+  {
+    id: '5',
+    title: 'Submissão de Plano de Aula',
+    type: 'task',
+    urgency: 'onTime',
+    startDate: addDays(new Date(), -1),
+    endDate: addDays(new Date(), 5),
+    description: 'Prazo para submissão do plano de aula do próximo semestre',
+    link: 'https://www.ulife.com.br/planos-aula',
+    isCompleted: true
+  },
+  {
+    id: '6',
+    title: 'Workshop de Ferramentas Digitais',
+    type: 'event',
+    urgency: 'onTime',
+    startTime: '09:00',
+    endTime: '12:00',
+    startDate: addDays(new Date(), 2),
+    description: 'Capacitação em ferramentas digitais para ensino remoto',
+    link: 'https://www.ulife.com.br/eventos/workshop-ferramentas'
+  },
+  {
+    id: '7',
+    title: 'Nova Política de Avaliação',
+    type: 'news',
+    urgency: 'urgent',
+    startDate: new Date(),
+    description: 'Divulgação da nova política de avaliação institucional',
+    link: 'https://www.ulife.com.br/noticias/nova-politica-avaliacao'
+  },
+  {
+    id: '8',
+    title: 'Revisão de Provas',
+    type: 'task',
+    urgency: 'medium',
+    startDate: addDays(new Date(), 1),
+    endDate: addDays(new Date(), 4),
+    description: 'Período para revisão das provas finais',
+    link: 'https://www.ulife.com.br/tarefas/revisao-provas'
   }
 ];
 
 const TeacherPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState<'day' | 'week' | 'month'>('week');
+  const [view, setView] = useState<'day' | 'week' | 'month'>('day'); // Default to day view
   
   const handlePrevious = () => {
     switch (view) {
@@ -87,7 +132,7 @@ const TeacherPage = () => {
       <Header userType="teacher" userName="Professor" />
       
       <div className="container mx-auto px-4 py-6 flex-1">
-        <h1 className="text-2xl font-bold mb-6">Calendário Acadêmico</h1>
+        <h1 className="text-2xl font-bold mb-6 text-purple-800">Calendário Acadêmico</h1>
         
         <div className="mb-6">
           <CalendarHeader 
