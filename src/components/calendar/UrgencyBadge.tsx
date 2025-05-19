@@ -13,19 +13,19 @@ const UrgencyBadge = ({ level }: UrgencyBadgeProps) => {
       case 'onTime':
         return {
           variant: 'outline' as const,
-          className: 'border-purple-500 bg-purple-50 text-purple-700 text-xs',
+          className: 'border-green-500 bg-green-50 text-green-700 text-xs',
           label: 'Em tempo'
         };
       case 'medium':
         return {
           variant: 'outline' as const,
-          className: 'border-pink-500 bg-pink-50 text-pink-700 text-xs',
+          className: 'border-yellow-500 bg-yellow-50 text-yellow-700 text-xs',
           label: 'Atenção'
         };
       case 'urgent':
         return {
           variant: 'outline' as const,
-          className: 'border-fuchsia-500 bg-fuchsia-50 text-fuchsia-700 text-xs',
+          className: 'border-orange-500 bg-orange-50 text-orange-700 text-xs',
           label: 'Urgente'
         };
       default:
