@@ -39,21 +39,21 @@ const CalendarLegend = () => {
         <ToggleGroup type="multiple" className="flex flex-wrap gap-2">
           <ToggleGroupItem 
             value="jornadaDocente" 
-            className="bg-purple-100 text-purple-800 hover:bg-purple-200 data-[state=on]:bg-purple-600 data-[state=on]:text-white border-purple-300"
+            className="text-xs px-2 py-1 bg-purple-50 text-purple-700 hover:bg-purple-100 data-[state=on]:bg-purple-200 data-[state=on]:text-purple-900 border-purple-200 border"
             aria-label="Jornada Docente"
           >
             Jornada Docente
           </ToggleGroupItem>
           <ToggleGroupItem 
             value="jornadaDiscente" 
-            className="bg-pink-100 text-pink-800 hover:bg-pink-200 data-[state=on]:bg-pink-600 data-[state=on]:text-white border-pink-300"
+            className="text-xs px-2 py-1 bg-pink-50 text-pink-700 hover:bg-pink-100 data-[state=on]:bg-pink-200 data-[state=on]:text-pink-900 border-pink-200 border"
             aria-label="Jornada Discente"
           >
             Jornada Discente
           </ToggleGroupItem>
           <ToggleGroupItem 
             value="institucional" 
-            className="bg-violet-100 text-violet-800 hover:bg-violet-200 data-[state=on]:bg-violet-600 data-[state=on]:text-white border-violet-300"
+            className="text-xs px-2 py-1 bg-violet-50 text-violet-700 hover:bg-violet-100 data-[state=on]:bg-violet-200 data-[state=on]:text-violet-900 border-violet-200 border"
             aria-label="Institucional"
           >
             Institucional
