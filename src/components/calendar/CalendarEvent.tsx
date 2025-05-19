@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ExternalLink, Check, Bell, FileText, Megaphone } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UrgencyBadge from './UrgencyBadge';
+import { determineUrgency } from '@/utils/dateUtils';
 
 export type EventType = 'event' | 'task' | 'news';
 export type UrgencyLevel = 'onTime' | 'medium' | 'urgent';
@@ -27,14 +27,19 @@ const CalendarEvent = ({
   id,
   title,
   type,
-  urgency = 'onTime',
+  urgency: providedUrgency,
   startTime,
   endTime,
+  startDate,
+  endDate,
   description,
   link,
   isCompleted: initialIsCompleted = false
 }: CalendarEventProps) => {
   const [isCompleted, setIsCompleted] = useState(initialIsCompleted);
+  
+  // Calculate urgency automatically if not manually provided
+  const urgency = providedUrgency || determineUrgency(startDate, endDate);
 
   const getEventStyles = () => {
     const baseStyles = "p-2 rounded-md text-sm mb-1 border-l-4";

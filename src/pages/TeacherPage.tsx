@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
@@ -9,16 +8,15 @@ import CalendarLegend from '@/components/calendar/CalendarLegend';
 import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
 
-// Sample events data with links
+// Sample events data with links and dates for automatic urgency calculation
 const sampleEvents: CalendarEventProps[] = [
   {
     id: '1',
     title: 'Reunião de Departamento',
     type: 'event',
-    urgency: 'onTime',
     startTime: '10:00',
     endTime: '11:30',
-    startDate: new Date(),
+    startDate: new Date(), // Today
     description: 'Reunião mensal do departamento para discutir o calendário acadêmico',
     link: 'https://meet.google.com/abc-defg-hij'
   },
@@ -26,9 +24,8 @@ const sampleEvents: CalendarEventProps[] = [
     id: '2',
     title: 'Entrega de Notas',
     type: 'task',
-    urgency: 'urgent',
     startDate: new Date(),
-    endDate: addDays(new Date(), 2),
+    endDate: addDays(new Date(), 2), // In 2 days
     description: 'Prazo final para entrega das notas do bimestre no sistema',
     link: 'https://www.ulife.com.br/notas'
   },
@@ -36,8 +33,7 @@ const sampleEvents: CalendarEventProps[] = [
     id: '3',
     title: 'Palestra sobre Metodologias Ativas',
     type: 'news',
-    urgency: 'medium',
-    startDate: addDays(new Date(), 1),
+    startDate: addDays(new Date(), 5), // In 5 days
     description: 'Palestra com especialista em metodologias ativas, aberta a todos os docentes',
     link: 'https://www.ulife.com.br/eventos/palestra-metodologias'
   },
@@ -45,10 +41,9 @@ const sampleEvents: CalendarEventProps[] = [
     id: '4',
     title: 'Conselho de Classe',
     type: 'event',
-    urgency: 'medium',
     startTime: '14:00',
     endTime: '17:00',
-    startDate: addDays(new Date(), 3),
+    startDate: addDays(new Date(), 10), // In 10 days
     description: 'Conselho de classe do 2º bimestre - participação obrigatória',
     link: 'https://www.ulife.com.br/eventos/conselho-classe'
   },
@@ -56,8 +51,7 @@ const sampleEvents: CalendarEventProps[] = [
     id: '5',
     title: 'Submissão de Plano de Aula',
     type: 'task',
-    urgency: 'onTime',
-    startDate: addDays(new Date(), -1),
+    startDate: addDays(new Date(), -1), // Yesterday
     endDate: addDays(new Date(), 5),
     description: 'Prazo para submissão do plano de aula do próximo semestre',
     link: 'https://www.ulife.com.br/planos-aula',
@@ -67,10 +61,9 @@ const sampleEvents: CalendarEventProps[] = [
     id: '6',
     title: 'Workshop de Ferramentas Digitais',
     type: 'event',
-    urgency: 'onTime',
     startTime: '09:00',
     endTime: '12:00',
-    startDate: addDays(new Date(), 2),
+    startDate: addDays(new Date(), 15), // In 15 days
     description: 'Capacitação em ferramentas digitais para ensino remoto',
     link: 'https://www.ulife.com.br/eventos/workshop-ferramentas'
   },
@@ -78,8 +71,7 @@ const sampleEvents: CalendarEventProps[] = [
     id: '7',
     title: 'Nova Política de Avaliação',
     type: 'news',
-    urgency: 'urgent',
-    startDate: new Date(),
+    startDate: addDays(new Date(), 1), // Tomorrow
     description: 'Divulgação da nova política de avaliação institucional',
     link: 'https://www.ulife.com.br/noticias/nova-politica-avaliacao'
   },
@@ -87,9 +79,8 @@ const sampleEvents: CalendarEventProps[] = [
     id: '8',
     title: 'Revisão de Provas',
     type: 'task',
-    urgency: 'medium',
-    startDate: addDays(new Date(), 1),
-    endDate: addDays(new Date(), 4),
+    startDate: addDays(new Date(), 4), // In 4 days
+    endDate: addDays(new Date(), 8),
     description: 'Período para revisão das provas finais',
     link: 'https://www.ulife.com.br/tarefas/revisao-provas'
   }
