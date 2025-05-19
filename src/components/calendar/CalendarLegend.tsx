@@ -1,6 +1,7 @@
 
 import React from 'react';
 import UrgencyBadge from './UrgencyBadge';
+import { Bell, FileText, Megaphone } from 'lucide-react';
 
 const CalendarLegend = () => {
   return (
@@ -9,15 +10,15 @@ const CalendarLegend = () => {
         <h3 className="text-sm font-semibold text-purple-800">Tipos:</h3>
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-purple-500 rounded-full"></span>
+            <Bell className="h-4 w-4 text-purple-600" />
             <span className="text-sm">Eventos</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-pink-500 rounded-full"></span>
+            <FileText className="h-4 w-4 text-pink-600" />
             <span className="text-sm">Tarefas</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-violet-500 rounded-full"></span>
+            <Megaphone className="h-4 w-4 text-violet-600" />
             <span className="text-sm">Notícias</span>
           </div>
         </div>

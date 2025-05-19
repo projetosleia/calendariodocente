@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ExternalLink, Check, Calendar, FileText, Bell } from 'lucide-react';
+import { ExternalLink, Check, Bell, FileText, Megaphone } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UrgencyBadge from './UrgencyBadge';
@@ -62,11 +62,11 @@ const CalendarEvent = ({
   const getIcon = () => {
     switch (type) {
       case 'event':
-        return <Calendar className="h-4 w-4 text-purple-600" />;
+        return <Bell className="h-4 w-4 text-purple-600" />;
       case 'task':
         return <FileText className="h-4 w-4 text-pink-600" />;
       case 'news':
-        return <Bell className="h-4 w-4 text-violet-600" />;
+        return <Megaphone className="h-4 w-4 text-violet-600" />;
       default:
         return null;
     }
