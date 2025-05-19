@@ -2,6 +2,7 @@
 import React from 'react';
 import UrgencyBadge from './UrgencyBadge';
 import { Bell, FileText, Megaphone } from 'lucide-react';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 const CalendarLegend = () => {
   return (
@@ -35,11 +36,29 @@ const CalendarLegend = () => {
 
       <div className="flex flex-col gap-2">
         <h3 className="text-sm font-semibold text-purple-800">Categorias:</h3>
-        <div className="flex flex-wrap gap-2">
-          <UrgencyBadge type="event" level="onTime" category="jornadaDocente" />
-          <UrgencyBadge type="event" level="onTime" category="jornadaDiscente" />
-          <UrgencyBadge type="event" level="onTime" category="institucional" />
-        </div>
+        <ToggleGroup type="multiple" className="flex flex-wrap gap-2">
+          <ToggleGroupItem 
+            value="jornadaDocente" 
+            className="bg-purple-100 text-purple-800 hover:bg-purple-200 data-[state=on]:bg-purple-600 data-[state=on]:text-white border-purple-300"
+            aria-label="Jornada Docente"
+          >
+            Jornada Docente
+          </ToggleGroupItem>
+          <ToggleGroupItem 
+            value="jornadaDiscente" 
+            className="bg-pink-100 text-pink-800 hover:bg-pink-200 data-[state=on]:bg-pink-600 data-[state=on]:text-white border-pink-300"
+            aria-label="Jornada Discente"
+          >
+            Jornada Discente
+          </ToggleGroupItem>
+          <ToggleGroupItem 
+            value="institucional" 
+            className="bg-violet-100 text-violet-800 hover:bg-violet-200 data-[state=on]:bg-violet-600 data-[state=on]:text-white border-violet-300"
+            aria-label="Institucional"
+          >
+            Institucional
+          </ToggleGroupItem>
+        </ToggleGroup>
       </div>
     </div>
   );
