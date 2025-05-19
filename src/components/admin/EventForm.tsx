@@ -17,13 +17,144 @@ import { ptBR } from 'date-fns/locale';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { EventType, UrgencyLevel } from '../calendar/CalendarEvent';
+import { EventType } from '../calendar/CalendarEvent';
+import { EventCategory, TaskUrgency } from '@/utils/dateUtils';
 
 const EventForm = () => {
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+  const [validUntil, setValidUntil] = useState<Date | undefined>(undefined);
   const [eventType, setEventType] = useState<EventType>('event');
-  const [urgencyLevel, setUrgencyLevel] = useState<UrgencyLevel>('onTime');
+  const [category, setCategory] = useState<EventCategory>('jornadaDocente');
+
+  // Show different date fields based on event type
+  const renderDateFields = () => {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          {eventType === 'event' ? (
+            <Label>Data de Realização</Label>
+          ) : eventType === 'task' ? (
+            <Label>Data Inicial</Label>
+          ) : (
+            <Label>Data de Publicação</Label>
+          )}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-normal"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {startDate ? (
+                  format(startDate, "dd/MM/yyyy", { locale: ptBR })
+                ) : (
+                  <span>Selecione uma data</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar
+                mode="single"
+                selected={startDate}
+                onSelect={setStartDate}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {eventType === 'task' && (
+          <div>
+            <Label>Data de Entrega (Prazo)</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {endDate ? (
+                    format(endDate, "dd/MM/yyyy", { locale: ptBR })
+                  ) : (
+                    <span>Selecione uma data</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={endDate}
+                  onSelect={setEndDate}
+                  disabled={(date) => (startDate ? date < startDate : false)}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
+
+        {eventType === 'news' && (
+          <div>
+            <Label>Data de Validade</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {validUntil ? (
+                    format(validUntil, "dd/MM/yyyy", { locale: ptBR })
+                  ) : (
+                    <span>Selecione uma data</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={validUntil}
+                  onSelect={setValidUntil}
+                  disabled={(date) => (startDate ? date < startDate : false)}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
+
+        {eventType !== 'task' && (
+          <div>
+            <Label htmlFor="category">Categoria</Label>
+            <Select value={category} onValueChange={(val) => setCategory(val as EventCategory)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione a categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="jornadaDocente">Jornada Docente</SelectItem>
+                <SelectItem value="jornadaDiscente">Jornada Discente</SelectItem>
+                <SelectItem value="institucional">Institucional</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {eventType === 'event' && (
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <Label htmlFor="startTime">Hora Início</Label>
+              <Input id="startTime" type="time" placeholder="HH:MM" />
+            </div>
+            <div>
+              <Label htmlFor="endTime">Hora Fim</Label>
+              <Input id="endTime" type="time" placeholder="HH:MM" />
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
@@ -56,79 +187,11 @@ const EventForm = () => {
           <Textarea id="description" placeholder="Descrição do item" rows={3} />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <Label>Data Inicial</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-left font-normal"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate ? (
-                    format(startDate, "dd/MM/yyyy", { locale: ptBR })
-                  ) : (
-                    <span>Selecione uma data</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={startDate}
-                  onSelect={setStartDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+        {renderDateFields()}
 
-          <div>
-            <Label>Data Final {eventType === 'event' || eventType === 'task' ? '(opcional)' : ''}</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    eventType === 'news' && "opacity-50 cursor-not-allowed"
-                  )}
-                  disabled={eventType === 'news'}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {endDate ? (
-                    format(endDate, "dd/MM/yyyy", { locale: ptBR })
-                  ) : (
-                    <span>Selecione uma data</span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={endDate}
-                  onSelect={setEndDate}
-                  disabled={(date) => (startDate ? date < startDate : false)}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          <div>
-            <Label htmlFor="urgency">Urgência</Label>
-            <Select value={urgencyLevel} onValueChange={(val) => setUrgencyLevel(val as UrgencyLevel)}>
-              <SelectTrigger>
-                <SelectValue placeholder="Nível de urgência" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="onTime">Em tempo</SelectItem>
-                <SelectItem value="medium">Média</SelectItem>
-                <SelectItem value="urgent">Urgente</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <div>
+          <Label htmlFor="link">Link</Label>
+          <Input id="link" placeholder="URL para mais informações" />
         </div>
 
         <div>

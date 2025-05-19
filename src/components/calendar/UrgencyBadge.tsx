@@ -1,49 +1,95 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { UrgencyLevel } from './CalendarEvent';
+import { TaskUrgency, EventCategory } from '@/utils/dateUtils';
+import { EventType } from './CalendarEvent';
 
 interface UrgencyBadgeProps {
-  level: UrgencyLevel;
+  type: EventType;
+  level: TaskUrgency;
+  category?: EventCategory;
 }
 
-const UrgencyBadge = ({ level }: UrgencyBadgeProps) => {
-  const getUrgencyProps = () => {
+const UrgencyBadge = ({ type, level, category }: UrgencyBadgeProps) => {
+  // For tasks, we show the urgency level
+  if (type === 'task') {
     switch (level) {
       case 'onTime':
-        return {
-          variant: 'outline' as const,
-          className: 'border-green-500 bg-green-50 text-green-700 text-xs',
-          label: 'Em tempo'
-        };
+        return (
+          <Badge variant="outline" className="border-green-500 bg-green-50 text-green-700 text-xs">
+            Em tempo
+          </Badge>
+        );
       case 'medium':
-        return {
-          variant: 'outline' as const,
-          className: 'border-yellow-500 bg-yellow-50 text-yellow-700 text-xs',
-          label: 'Atenção'
-        };
+        return (
+          <Badge variant="outline" className="border-yellow-500 bg-yellow-50 text-yellow-700 text-xs">
+            Atenção
+          </Badge>
+        );
       case 'urgent':
-        return {
-          variant: 'outline' as const,
-          className: 'border-orange-500 bg-orange-50 text-orange-700 text-xs',
-          label: 'Urgente'
-        };
+        return (
+          <Badge variant="outline" className="border-orange-500 bg-orange-50 text-orange-700 text-xs">
+            Urgente
+          </Badge>
+        );
       default:
-        return {
-          variant: 'outline' as const,
-          className: '',
-          label: 'Desconhecido'
-        };
+        return null;
     }
-  };
-
-  const { variant, className, label } = getUrgencyProps();
-
-  return (
-    <Badge variant={variant} className={className}>
-      {label}
-    </Badge>
-  );
+  }
+  
+  // For events and news, we show the category (and visually indicate status with color)
+  if (type === 'event' || type === 'news') {
+    let colorClasses = '';
+    
+    // Color based on the level (timing/validity)
+    switch (level) {
+      case 'onTime':
+        colorClasses = "border-green-500 bg-green-50 text-green-700";
+        break;
+      case 'medium':
+        colorClasses = "border-yellow-500 bg-yellow-50 text-yellow-700";
+        break;
+      case 'urgent':
+        colorClasses = "border-orange-500 bg-orange-50 text-orange-700";
+        break;
+    }
+    
+    // Label based on the category
+    if (category) {
+      let label = '';
+      
+      switch (category) {
+        case 'jornadaDocente':
+          label = 'Jornada Docente';
+          break;
+        case 'jornadaDiscente':
+          label = 'Jornada Discente';
+          break;
+        case 'institucional':
+          label = 'Institucional';
+          break;
+      }
+      
+      return (
+        <Badge variant="outline" className={`${colorClasses} text-xs`}>
+          {label}
+        </Badge>
+      );
+    }
+    
+    // If no category specified, show a default label based on the level
+    const defaultLabel = type === 'event' 
+      ? (level === 'urgent' ? 'Em andamento' : level === 'medium' ? 'Em breve' : 'Agendado')
+      : (level === 'onTime' ? 'Válida' : 'Expirada');
+      
+    return (
+      <Badge variant="outline" className={`${colorClasses} text-xs`}>
+        {defaultLabel}
+      </Badge>
+    );
+  }
+  
+  return null;
 };
 
 export default UrgencyBadge;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
@@ -7,6 +8,7 @@ import MonthView from '@/components/calendar/MonthView';
 import CalendarLegend from '@/components/calendar/CalendarLegend';
 import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
+import { Toaster } from '@/components/ui/toaster';
 
 // Sample events data with links and dates for automatic urgency calculation
 const sampleEvents: CalendarEventProps[] = [
@@ -14,6 +16,7 @@ const sampleEvents: CalendarEventProps[] = [
     id: '1',
     title: 'Reunião de Departamento',
     type: 'event',
+    category: 'jornadaDocente',
     startTime: '10:00',
     endTime: '11:30',
     startDate: new Date(), // Today
@@ -33,7 +36,9 @@ const sampleEvents: CalendarEventProps[] = [
     id: '3',
     title: 'Palestra sobre Metodologias Ativas',
     type: 'news',
+    category: 'jornadaDocente',
     startDate: addDays(new Date(), 5), // In 5 days
+    validUntil: addDays(new Date(), 15), // Valid for 15 days
     description: 'Palestra com especialista em metodologias ativas, aberta a todos os docentes',
     link: 'https://www.ulife.com.br/eventos/palestra-metodologias'
   },
@@ -41,6 +46,7 @@ const sampleEvents: CalendarEventProps[] = [
     id: '4',
     title: 'Conselho de Classe',
     type: 'event',
+    category: 'institucional',
     startTime: '14:00',
     endTime: '17:00',
     startDate: addDays(new Date(), 10), // In 10 days
@@ -61,17 +67,21 @@ const sampleEvents: CalendarEventProps[] = [
     id: '6',
     title: 'Workshop de Ferramentas Digitais',
     type: 'event',
+    category: 'jornadaDocente',
     startTime: '09:00',
     endTime: '12:00',
-    startDate: addDays(new Date(), 15), // In 15 days
+    startDate: addDays(new Date(), 1), // Tomorrow
     description: 'Capacitação em ferramentas digitais para ensino remoto',
-    link: 'https://www.ulife.com.br/eventos/workshop-ferramentas'
+    link: 'https://www.ulife.com.br/eventos/workshop-ferramentas',
+    isRegistered: true
   },
   {
     id: '7',
     title: 'Nova Política de Avaliação',
     type: 'news',
+    category: 'institucional',
     startDate: addDays(new Date(), 1), // Tomorrow
+    validUntil: addDays(new Date(), 30), // Valid for a month
     description: 'Divulgação da nova política de avaliação institucional',
     link: 'https://www.ulife.com.br/noticias/nova-politica-avaliacao'
   },
@@ -83,6 +93,27 @@ const sampleEvents: CalendarEventProps[] = [
     endDate: addDays(new Date(), 8),
     description: 'Período para revisão das provas finais',
     link: 'https://www.ulife.com.br/tarefas/revisao-provas'
+  },
+  {
+    id: '9',
+    title: 'Mostra de Iniciação Científica',
+    type: 'event',
+    category: 'jornadaDiscente',
+    startTime: '13:00',
+    endTime: '18:00',
+    startDate: addDays(new Date(), 2), // In 2 days
+    description: 'Apresentação dos projetos de iniciação científica dos alunos',
+    link: 'https://www.ulife.com.br/eventos/mostra-ic'
+  },
+  {
+    id: '10',
+    title: 'Atualização do Material Didático',
+    type: 'news',
+    category: 'jornadaDocente',
+    startDate: new Date(), // Today
+    validUntil: addDays(new Date(), -1), // Already expired
+    description: 'Novos materiais didáticos disponíveis na plataforma',
+    link: 'https://www.ulife.com.br/noticias/materiais'
   }
 ];
 
@@ -151,6 +182,8 @@ const TeacherPage = () => {
           )}
         </div>
       </div>
+      
+      <Toaster />
     </div>
   );
 };

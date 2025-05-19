@@ -25,11 +25,20 @@ const CalendarLegend = () => {
       </div>
       
       <div className="flex flex-col gap-2">
-        <h3 className="text-sm font-semibold text-purple-800">Urgência:</h3>
+        <h3 className="text-sm font-semibold text-purple-800">Status das Tarefas:</h3>
         <div className="flex flex-wrap gap-2">
-          <UrgencyBadge level="onTime" />
-          <UrgencyBadge level="medium" />
-          <UrgencyBadge level="urgent" />
+          <UrgencyBadge type="task" level="onTime" />
+          <UrgencyBadge type="task" level="medium" />
+          <UrgencyBadge type="task" level="urgent" />
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <h3 className="text-sm font-semibold text-purple-800">Categorias:</h3>
+        <div className="flex flex-wrap gap-2">
+          <UrgencyBadge type="event" level="onTime" category="jornadaDocente" />
+          <UrgencyBadge type="event" level="onTime" category="jornadaDiscente" />
+          <UrgencyBadge type="event" level="onTime" category="institucional" />
         </div>
       </div>
     </div>

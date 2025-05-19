@@ -1,45 +1,65 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ExternalLink, Check, Bell, FileText, Megaphone } from 'lucide-react';
+import { ExternalLink, Check, Bell, FileText, Megaphone, Calendar } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UrgencyBadge from './UrgencyBadge';
-import { determineUrgency } from '@/utils/dateUtils';
+import { determineTaskUrgency, determineEventStatus, determineNewsValidity, EventCategory, TaskUrgency } from '@/utils/dateUtils';
+import { useToast } from '@/hooks/use-toast';
 
 export type EventType = 'event' | 'task' | 'news';
-export type UrgencyLevel = 'onTime' | 'medium' | 'urgent';
 
 export interface CalendarEventProps {
   id: string;
   title: string;
   type: EventType;
-  urgency?: UrgencyLevel;
+  category?: EventCategory;
   startTime?: string;
   endTime?: string;
   startDate: Date;
   endDate?: Date;
+  validUntil?: Date;
   description?: string;
   link?: string;
   isCompleted?: boolean;
+  isRegistered?: boolean;
 }
 
 const CalendarEvent = ({
   id,
   title,
   type,
-  urgency: providedUrgency,
+  category,
   startTime,
   endTime,
   startDate,
   endDate,
+  validUntil,
   description,
   link,
-  isCompleted: initialIsCompleted = false
+  isCompleted: initialIsCompleted = false,
+  isRegistered: initialIsRegistered = false
 }: CalendarEventProps) => {
   const [isCompleted, setIsCompleted] = useState(initialIsCompleted);
+  const [isRegistered, setIsRegistered] = useState(initialIsRegistered);
+  const { toast } = useToast();
   
-  // Calculate urgency automatically if not manually provided
-  const urgency = providedUrgency || determineUrgency(startDate, endDate);
+  // Calculate status based on event type
+  const getStatus = (): TaskUrgency => {
+    switch (type) {
+      case 'task':
+        return determineTaskUrgency(startDate, endDate);
+      case 'event':
+        return determineEventStatus(startDate);
+      case 'news':
+        return validUntil ? determineNewsValidity(validUntil) : 'onTime';
+      default:
+        return 'onTime';
+    }
+  };
+
+  const status = getStatus();
 
   const getEventStyles = () => {
     const baseStyles = "p-2 rounded-md text-sm mb-1 border-l-4";
@@ -51,17 +71,17 @@ const CalendarEvent = ({
       news: "bg-violet-50 border-l-violet-500"
     };
     
-    // Urgency-specific styles
-    const urgencyStyles = {
+    // Status-specific styles
+    const statusStyles = {
       onTime: "border-green-500",
       medium: "border-yellow-500",
       urgent: "border-orange-500"
     };
 
     // Completed style
-    const completedStyle = isCompleted ? "opacity-60" : "";
+    const completedStyle = isCompleted || isRegistered ? "opacity-60" : "";
     
-    return cn(baseStyles, typeStyles[type], urgencyStyles[urgency], completedStyle);
+    return cn(baseStyles, typeStyles[type], statusStyles[status], completedStyle);
   };
 
   const getIcon = () => {
@@ -88,8 +108,39 @@ const CalendarEvent = ({
 
   const handleCheckboxChange = (checked: boolean) => {
     setIsCompleted(checked);
-    // Aqui poderíamos chamar uma API para atualizar o status do item
+    // Here we would call an API to update the item status
+    toast({
+      title: checked ? "Tarefa concluída" : "Tarefa pendente",
+      description: `A tarefa "${title}" foi marcada como ${checked ? 'concluída' : 'pendente'}.`
+    });
     console.log(`Item ${id} marcado como ${checked ? 'concluído' : 'pendente'}`);
+  };
+
+  const handleRegistration = (checked: boolean) => {
+    setIsRegistered(checked);
+    if (checked) {
+      // Here we would integrate with Microsoft Teams calendar
+      toast({
+        title: "Inscrição realizada",
+        description: `Você se inscreveu no evento "${title}". O evento foi adicionado à sua agenda do Teams.`
+      });
+      console.log(`Inscrição no evento ${id} realizada`);
+    } else {
+      toast({
+        title: "Inscrição cancelada",
+        description: `Sua inscrição no evento "${title}" foi cancelada.`
+      });
+      console.log(`Inscrição no evento ${id} cancelada`);
+    }
+  };
+
+  const handleReadNews = (checked: boolean) => {
+    setIsCompleted(checked);
+    toast({
+      title: checked ? "Notícia lida" : "Notícia marcada como não lida",
+      description: `A notícia "${title}" foi marcada como ${checked ? 'lida' : 'não lida'}.`
+    });
+    console.log(`Notícia ${id} marcada como ${checked ? 'lida' : 'não lida'}`);
   };
 
   return (
@@ -104,10 +155,26 @@ const CalendarEvent = ({
               className="mt-0.5"
             />
           )}
+          {type === 'event' && (
+            <Checkbox
+              id={`register-${id}`}
+              checked={isRegistered}
+              onCheckedChange={handleRegistration}
+              className="mt-0.5"
+            />
+          )}
+          {type === 'news' && (
+            <Checkbox
+              id={`read-${id}`}
+              checked={isCompleted}
+              onCheckedChange={handleReadNews}
+              className="mt-0.5"
+            />
+          )}
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
               {getIcon()}
-              <span className={cn("font-medium", isCompleted && "line-through")}>{title}</span>
+              <span className={cn("font-medium", (isCompleted || isRegistered) && "line-through")}>{title}</span>
             </div>
             {description && (
               <p className="text-xs text-gray-600 mt-1">{description}</p>
@@ -128,7 +195,7 @@ const CalendarEvent = ({
           {(startTime || endTime) && (
             <span className="text-xs text-gray-500">{getTimeString()}</span>
           )}
-          <UrgencyBadge level={urgency} />
+          <UrgencyBadge type={type} level={status} category={category} />
         </div>
       </div>
     </div>
