@@ -44,7 +44,7 @@ const MonthView = ({ date, events }: MonthViewProps) => {
   });
   
   const getEventsForDay = (day: Date) => {
-    return events.filter(event => {
+    const dayEvents = events.filter(event => {
       const eventStartDate = new Date(event.startDate);
       const eventEndDate = event.endDate ? new Date(event.endDate) : eventStartDate;
       
@@ -53,6 +53,12 @@ const MonthView = ({ date, events }: MonthViewProps) => {
         (eventStartDate <= day && eventEndDate >= day) ||
         isSameDay(eventStartDate, day)
       );
+    });
+    
+    // Sort by type: tasks first, then events, then news
+    return dayEvents.sort((a, b) => {
+      const typeOrder = { task: 0, event: 1, news: 2 };
+      return typeOrder[a.type] - typeOrder[b.type];
     }).slice(0, 3); // Limit to 3 events per day
   };
   

@@ -9,8 +9,8 @@ interface CalendarHeaderProps {
   currentDate: Date;
   onPrevious: () => void;
   onNext: () => void;
-  view: 'day' | 'week' | 'month';
-  onViewChange: (view: 'day' | 'week' | 'month') => void;
+  view: 'day' | 'week' | 'month' | 'semester';
+  onViewChange: (view: 'day' | 'week' | 'month' | 'semester') => void;
 }
 
 const CalendarHeader = ({ 
@@ -28,6 +28,8 @@ const CalendarHeader = ({
         return `Semana de ${format(currentDate, "dd 'de' MMMM", { locale: ptBR })}`;
       case 'month':
         return format(currentDate, "MMMM 'de' yyyy", { locale: ptBR });
+      case 'semester':
+        return `Semestre de ${format(currentDate, "MMMM 'de' yyyy", { locale: ptBR })}`;
       default:
         return '';
     }
@@ -47,7 +49,7 @@ const CalendarHeader = ({
         </div>
       </div>
       
-      <div className="flex items-center space-x-2 bg-purple-50 rounded-md p-1">
+      <div className="flex flex-wrap items-center space-x-2 bg-purple-50 rounded-md p-1">
         <Button 
           variant={view === 'day' ? "default" : "ghost"} 
           size="sm"
@@ -71,6 +73,14 @@ const CalendarHeader = ({
           className={view === 'month' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
         >
           Mês
+        </Button>
+        <Button 
+          variant={view === 'semester' ? "default" : "ghost"} 
+          size="sm"
+          onClick={() => onViewChange('semester')}
+          className={view === 'semester' ? "bg-purple-600 text-white hover:bg-purple-700" : "text-purple-600 hover:bg-purple-100"}
+        >
+          Semestre
         </Button>
       </div>
     </div>

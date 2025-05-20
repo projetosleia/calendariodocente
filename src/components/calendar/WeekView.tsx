@@ -23,17 +23,22 @@ const WeekView = ({ date, events }: WeekViewProps) => {
   const timeSlots = Array.from({ length: 13 }, (_, i) => i + 8);
   
   const getEventsForDayAndHour = (day: Date, hour: number) => {
-    return events.filter(event => {
-      const eventDate = new Date(event.startDate);
-      const eventHour = event.startTime ? parseInt(event.startTime.split(':')[0]) : null;
-      
-      return (
-        eventDate.getDate() === day.getDate() &&
-        eventDate.getMonth() === day.getMonth() &&
-        eventDate.getFullYear() === day.getFullYear() &&
-        eventHour === hour
-      );
-    });
+    return events
+      .filter(event => {
+        const eventDate = new Date(event.startDate);
+        const eventHour = event.startTime ? parseInt(event.startTime.split(':')[0]) : null;
+        
+        return (
+          eventDate.getDate() === day.getDate() &&
+          eventDate.getMonth() === day.getMonth() &&
+          eventDate.getFullYear() === day.getFullYear() &&
+          eventHour === hour
+        );
+      })
+      .sort((a, b) => {
+        const typeOrder = { task: 0, event: 1, news: 2 };
+        return typeOrder[a.type] - typeOrder[b.type];
+      });
   };
 
   return (

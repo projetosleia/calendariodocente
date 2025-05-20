@@ -5,10 +5,12 @@ import CalendarHeader from '@/components/calendar/CalendarHeader';
 import DayView from '@/components/calendar/DayView';
 import WeekView from '@/components/calendar/WeekView';
 import MonthView from '@/components/calendar/MonthView';
+import SemesterView from '@/components/calendar/SemesterView';
 import CalendarLegend from '@/components/calendar/CalendarLegend';
 import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
 import { Toaster } from '@/components/ui/toaster';
+import { DatePicker } from '@/components/calendar/DatePicker';
 
 // Sample events data with links and dates for automatic urgency calculation
 const sampleEvents: CalendarEventProps[] = [
@@ -119,7 +121,7 @@ const sampleEvents: CalendarEventProps[] = [
 
 const TeacherPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState<'day' | 'week' | 'month'>('day'); // Default to day view
+  const [view, setView] = useState<'day' | 'week' | 'month' | 'semester'>('day'); // Added semester view
   
   const handlePrevious = () => {
     switch (view) {
@@ -131,6 +133,9 @@ const TeacherPage = () => {
         break;
       case 'month':
         setCurrentDate(subMonths(currentDate, 1));
+        break;
+      case 'semester':
+        setCurrentDate(subMonths(currentDate, 6)); // Go back 6 months for semester view
         break;
     }
   };
@@ -146,6 +151,9 @@ const TeacherPage = () => {
       case 'month':
         setCurrentDate(addMonths(currentDate, 1));
         break;
+      case 'semester':
+        setCurrentDate(addMonths(currentDate, 6)); // Go forward 6 months for semester view
+        break;
     }
   };
   
@@ -154,18 +162,28 @@ const TeacherPage = () => {
       <Header userType="teacher" userName="Professor" />
       
       <div className="container mx-auto px-4 py-6 flex-1">
-        <h1 className="text-2xl font-bold mb-6 text-purple-800">Calendário Acadêmico</h1>
+        <h1 className="text-2xl font-bold mb-6 text-purple-800">Agenda Docente</h1>
         
-        <div className="mb-6">
-          <CalendarHeader 
-            currentDate={currentDate}
-            onPrevious={handlePrevious}
-            onNext={handleNext}
-            view={view}
-            onViewChange={setView}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="md:col-span-3">
+            <CalendarHeader 
+              currentDate={currentDate}
+              onPrevious={handlePrevious}
+              onNext={handleNext}
+              view={view}
+              onViewChange={setView}
+            />
+            
+            <CalendarLegend />
+          </div>
           
-          <CalendarLegend />
+          <div className="bg-white rounded-md shadow-sm p-3">
+            <h3 className="text-sm font-semibold text-purple-800 mb-2">Navegador</h3>
+            <DatePicker
+              selected={currentDate}
+              onSelect={(date) => date && setCurrentDate(date)}
+            />
+          </div>
         </div>
         
         <div>
@@ -179,6 +197,10 @@ const TeacherPage = () => {
           
           {view === 'month' && (
             <MonthView date={currentDate} events={sampleEvents} />
+          )}
+          
+          {view === 'semester' && (
+            <SemesterView date={currentDate} events={sampleEvents} />
           )}
         </div>
       </div>
