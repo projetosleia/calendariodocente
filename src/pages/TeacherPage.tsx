@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Header from '@/components/Header';
 import CalendarHeader from '@/components/calendar/CalendarHeader';
@@ -11,6 +10,9 @@ import { CalendarEventProps } from '@/components/calendar/CalendarEvent';
 import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date-fns';
 import { Toaster } from '@/components/ui/toaster';
 import { DatePicker } from '@/components/calendar/DatePicker';
+import { CreateReminderDialog } from '@/components/calendar/CreateReminderDialog';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 // Sample events data with links and dates for automatic urgency calculation
 const sampleEvents: CalendarEventProps[] = [
@@ -164,8 +166,34 @@ const TeacherPage = () => {
       <div className="container mx-auto px-4 py-6 flex-1">
         <h1 className="text-2xl font-bold mb-6 text-purple-800">Agenda Docente</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="md:col-span-3">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Sidebar Calendar */}
+          <div className="md:w-64 space-y-4">
+            <div className="bg-white rounded-md shadow-sm p-3">
+              <h3 className="text-sm font-semibold text-purple-800 mb-2">Calendário</h3>
+              <DatePicker
+                selected={currentDate}
+                onSelect={(date) => date && setCurrentDate(date)}
+              />
+            </div>
+            
+            <div>
+              <Button 
+                className="w-full bg-purple-700 hover:bg-purple-800 flex items-center justify-center gap-2"
+                onClick={() => {}}
+              >
+                <Plus className="h-4 w-4" />
+                <span>Novo evento</span>
+              </Button>
+            </div>
+            
+            <CalendarLegend />
+
+            <CreateReminderDialog />
+          </div>
+          
+          {/* Main Calendar View */}
+          <div className="flex-1">
             <CalendarHeader 
               currentDate={currentDate}
               onPrevious={handlePrevious}
@@ -174,34 +202,24 @@ const TeacherPage = () => {
               onViewChange={setView}
             />
             
-            <CalendarLegend />
+            <div>
+              {view === 'day' && (
+                <DayView date={currentDate} events={sampleEvents} />
+              )}
+              
+              {view === 'week' && (
+                <WeekView date={currentDate} events={sampleEvents} />
+              )}
+              
+              {view === 'month' && (
+                <MonthView date={currentDate} events={sampleEvents} />
+              )}
+              
+              {view === 'semester' && (
+                <SemesterView date={currentDate} events={sampleEvents} />
+              )}
+            </div>
           </div>
-          
-          <div className="bg-white rounded-md shadow-sm p-3">
-            <h3 className="text-sm font-semibold text-purple-800 mb-2">Calendário</h3>
-            <DatePicker
-              selected={currentDate}
-              onSelect={(date) => date && setCurrentDate(date)}
-            />
-          </div>
-        </div>
-        
-        <div>
-          {view === 'day' && (
-            <DayView date={currentDate} events={sampleEvents} />
-          )}
-          
-          {view === 'week' && (
-            <WeekView date={currentDate} events={sampleEvents} />
-          )}
-          
-          {view === 'month' && (
-            <MonthView date={currentDate} events={sampleEvents} />
-          )}
-          
-          {view === 'semester' && (
-            <SemesterView date={currentDate} events={sampleEvents} />
-          )}
         </div>
       </div>
       

@@ -57,7 +57,7 @@ const DayView = ({ date, events }: DayViewProps) => {
             </div>
           </div>
         )}
-        <ScrollArea className="h-[calc(100vh-280px)]">
+        <ScrollArea className="h-[calc(100vh-360px)]">
           <div className="min-w-full">
             {timeSlots.map(hour => (
               <div key={hour} className="flex min-h-[80px] border-b last:border-0">
