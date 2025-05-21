@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -13,7 +12,7 @@ const Index = () => {
           <Calendar className="h-8 w-8 text-purple-600" />
           <h1 className="text-4xl font-bold text-purple-700">ULife</h1>
         </div>
-        <h2 className="text-2xl font-semibold text-purple-600 mb-2 text-center">Sistema de Calendário Acadêmico</h2>
+        <h2 className="text-2xl font-semibold text-purple-600 mb-2 text-center">Agenda Docente</h2>
         <p className="text-lg text-gray-600 max-w-2xl text-center">
           Gerencie eventos acadêmicos, tarefas e notícias para professores com facilidade.
         </p>
@@ -87,7 +86,7 @@ const Index = () => {
                 </div>
                 <div>
                   <p className="font-medium text-purple-800">Tarefas</p>
-                  <p className="text-sm text-gray-600">Acompanhe tarefas pendentes e marque como concluídas</p>
+                  <p className="text-sm text-gray-600">Acompanhe tarefas previstas</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -101,14 +100,14 @@ const Index = () => {
               </li>
             </ul>
             <Button asChild className="w-full bg-purple-700 hover:bg-purple-800">
-              <Link to="/teacher">Acessar Calendário</Link>
+              <Link to="/teacher">Acessar Agenda Docente</Link>
             </Button>
           </CardContent>
         </Card>
       </div>
       
       <footer className="mt-12 text-center text-sm text-gray-500">
-        <p>© 2025 ULife - Sistema de Calendário Acadêmico</p>
+        <p>© 2025 ULife - Agenda Docente</p>
       </footer>
     </div>
   );

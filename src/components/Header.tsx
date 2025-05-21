@@ -19,7 +19,7 @@ const Header = ({ userType, userName }: HeaderProps) => {
             <span>ULife</span>
           </div>
           <span className="text-sm text-purple-500 hidden sm:inline">
-            {userType === 'admin' ? 'Painel de Configuração' : 'Calendário Acadêmico'}
+            {userType === 'admin' ? 'Painel de Configuração' : 'Agenda Docente'}
           </span>
         </div>
         
