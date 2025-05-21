@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ExternalLink, Check, Bell, FileText, Megaphone, Calendar } from 'lucide-react';
@@ -6,6 +7,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import UrgencyBadge from './UrgencyBadge';
 import { determineTaskUrgency, determineEventStatus, determineNewsValidity, EventCategory, TaskUrgency } from '@/utils/dateUtils';
 import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { differenceInDays } from 'date-fns';
 
 export type EventType = 'event' | 'task' | 'news';
 
@@ -59,6 +62,56 @@ const CalendarEvent = ({
   };
 
   const status = getStatus();
+
+  // Determine the color based on the timing - progress between start and end dates
+  const getProgressColor = () => {
+    const now = new Date();
+    
+    // If no end date, just return based on start date
+    if (!endDate) {
+      return "bg-green-100 border-green-500 text-green-800"; // At start
+    }
+    
+    const totalDuration = differenceInDays(endDate, startDate);
+    if (totalDuration <= 0) return "bg-green-100 border-green-500 text-green-800"; // Safety check
+    
+    const elapsedDuration = differenceInDays(now, startDate);
+    
+    // Already past end date
+    if (now > endDate) {
+      return "bg-orange-100 border-orange-500 text-orange-800";
+    }
+    
+    // Just started (first 30% of the duration)
+    if (elapsedDuration < totalDuration * 0.3) {
+      return "bg-green-100 border-green-500 text-green-800";
+    }
+    // In the middle (30-70% of the duration)
+    else if (elapsedDuration < totalDuration * 0.7) {
+      return "bg-yellow-100 border-yellow-500 text-yellow-800";
+    }
+    // Near the end (last 30% of the duration)
+    else {
+      return "bg-orange-100 border-orange-500 text-orange-800";
+    }
+  };
+  
+  const getTypeBadge = () => {
+    const typeNames = {
+      'event': 'Evento',
+      'task': 'Tarefa',
+      'news': 'Notícia'
+    };
+    
+    return (
+      <Badge 
+        variant="outline" 
+        className={`${getProgressColor()} text-xs font-normal`}
+      >
+        {typeNames[type]}
+      </Badge>
+    );
+  };
 
   const getEventStyles = () => {
     const baseStyles = "p-2 rounded-md text-sm mb-1 border-l-4";
@@ -174,6 +227,7 @@ const CalendarEvent = ({
             <div className="flex items-center gap-1">
               {getIcon()}
               <span className={cn("font-medium", (isCompleted || isRegistered) && "line-through")}>{title}</span>
+              <div className="ml-2">{getTypeBadge()}</div>
             </div>
             {description && (
               <p className="text-xs text-gray-600 mt-1">{description}</p>

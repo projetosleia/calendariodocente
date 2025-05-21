@@ -11,8 +11,6 @@ import { addDays, addMonths, addWeeks, subDays, subMonths, subWeeks } from 'date
 import { Toaster } from '@/components/ui/toaster';
 import { DatePicker } from '@/components/calendar/DatePicker';
 import { CreateReminderDialog } from '@/components/calendar/CreateReminderDialog';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 
 // Sample events data with links and dates for automatic urgency calculation
 const sampleEvents: CalendarEventProps[] = [
@@ -175,16 +173,6 @@ const TeacherPage = () => {
                 selected={currentDate}
                 onSelect={(date) => date && setCurrentDate(date)}
               />
-            </div>
-            
-            <div>
-              <Button 
-                className="w-full bg-purple-700 hover:bg-purple-800 flex items-center justify-center gap-2"
-                onClick={() => {}}
-              >
-                <Plus className="h-4 w-4" />
-                <span>Novo evento</span>
-              </Button>
             </div>
             
             <CalendarLegend />

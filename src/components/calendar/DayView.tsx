@@ -49,7 +49,7 @@ const DayView = ({ date, events }: DayViewProps) => {
       <CardContent className="p-0">
         {allDayEvents.length > 0 && (
           <div className="border-b p-2">
-            <h3 className="text-xs font-medium text-purple-700 mb-2">Acompanhe tarefas previstas</h3>
+            <h3 className="text-xs font-medium text-purple-700 mb-2">Acompanhe atividades previstas</h3>
             <div className="space-y-2">
               {allDayEvents.map((event) => (
                 <CalendarEvent key={event.id} {...event} />
