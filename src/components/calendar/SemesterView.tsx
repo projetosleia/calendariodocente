@@ -59,7 +59,7 @@ const SemesterView = ({ date, events }: SemesterViewProps) => {
         <ScrollArea className="h-[calc(100vh-280px)]">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
             {months.map((month, index) => {
-              const monthEvents = getEventsByType(month);
+              const monthEvents = getEventsByMonth(month);
               const orderedEvents = orderEventsByType(monthEvents);
               
               return (

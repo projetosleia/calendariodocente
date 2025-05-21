@@ -121,7 +121,7 @@ const sampleEvents: CalendarEventProps[] = [
 
 const TeacherPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState<'day' | 'week' | 'month' | 'semester'>('day'); // Added semester view
+  const [view, setView] = useState<'day' | 'week' | 'month' | 'semester'>('day');
   
   const handlePrevious = () => {
     switch (view) {
@@ -135,7 +135,7 @@ const TeacherPage = () => {
         setCurrentDate(subMonths(currentDate, 1));
         break;
       case 'semester':
-        setCurrentDate(subMonths(currentDate, 6)); // Go back 6 months for semester view
+        setCurrentDate(subMonths(currentDate, 6));
         break;
     }
   };
@@ -152,7 +152,7 @@ const TeacherPage = () => {
         setCurrentDate(addMonths(currentDate, 1));
         break;
       case 'semester':
-        setCurrentDate(addMonths(currentDate, 6)); // Go forward 6 months for semester view
+        setCurrentDate(addMonths(currentDate, 6));
         break;
     }
   };
@@ -178,7 +178,7 @@ const TeacherPage = () => {
           </div>
           
           <div className="bg-white rounded-md shadow-sm p-3">
-            <h3 className="text-sm font-semibold text-purple-800 mb-2">Navegador</h3>
+            <h3 className="text-sm font-semibold text-purple-800 mb-2">Calendário</h3>
             <DatePicker
               selected={currentDate}
               onSelect={(date) => date && setCurrentDate(date)}
